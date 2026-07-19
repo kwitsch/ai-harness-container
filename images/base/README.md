@@ -16,11 +16,11 @@ docker build -t ai-harness-base images/base
 | build-base | Alpine `build-base` package (gcc, make, musl-dev, etc. — Alpine's build-essentials equivalent) |
 | ripgrep (`rg`) | Alpine `ripgrep` package |
 | git | Alpine `git` package |
-| GitHub CLI (`gh`) | latest release from [cli/cli](https://github.com/cli/cli) (static binary — Alpine's `github-cli` apk package lags upstream) |
+| GitHub CLI (`gh`) | pinned release binary from [cli/cli](https://github.com/cli/cli), checksum-verified (Alpine's `github-cli` apk package lags upstream) |
 | Node.js 24 | Alpine `nodejs` / `npm` packages |
 | [bun](https://bun.com) | copied from the official `oven/bun:alpine` image |
-| [rtk](https://github.com/rtk-ai/rtk) | official install script |
-| [codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | official install script |
+| [rtk](https://github.com/rtk-ai/rtk) | pinned release binary, checksum-verified |
+| [codebase-memory-mcp](https://github.com/DeusData/codebase-memory-mcp) | pinned release binary, checksum-verified |
 
 ## Non-root user
 
@@ -28,9 +28,17 @@ The image runs as `harness` (uid/gid 1000), not root.
 
 ## Architecture
 
-amd64 only. `rtk`'s installer has no musl-compatible arm64 build (only a
-glibc `aarch64-unknown-linux-gnu` one, incompatible with this Alpine base),
-so building this image on an arm64 host installs a broken `rtk` binary.
+amd64 only. `rtk` has no musl-compatible arm64 release asset (only a glibc
+`aarch64-unknown-linux-gnu` one, incompatible with this Alpine base).
+
+## Bumping pinned tool versions
+
+`gh`, `rtk`, and `codebase-memory-mcp` are pinned via build ARGs
+(`GH_VERSION`, `RTK_VERSION`, `CBM_VERSION`) with a matching `--checksum` on
+each `ADD`. To bump one: update its `ARG` default and the `sha256:` value in
+the matching `ADD` line (from that release's own checksums file) — a
+mismatched checksum fails the build loudly rather than installing silently
+wrong content.
 
 ## Versioning
 
