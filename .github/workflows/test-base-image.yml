@@ -1,0 +1,19 @@
+name: Test base image
+
+on:
+  push:
+    paths:
+      - "images/base/**"
+      - ".github/workflows/test-base-image.yml"
+  pull_request:
+    paths:
+      - "images/base/**"
+      - ".github/workflows/test-base-image.yml"
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run base image tests
+        run: bash images/base/tests/test.sh
