@@ -26,10 +26,15 @@ docker build -t ai-harness-base images/base
 
 The image runs as `harness` (uid/gid 1000), not root.
 
+## Versioning
+
+Published to `ghcr.io/kwitsch/base` on merge to `main`, tagged from
+`VERSION` — see the repo-root `CLAUDE.md` for the full release flow.
+
 ## Tests
 
 ```
-bash tests/test.sh
+bash images/base/tests/test.sh
 ```
 
 Builds the image and verifies every tool installed correctly and that the
