@@ -26,6 +26,12 @@ docker build -t ai-harness-base images/base
 
 The image runs as `harness` (uid/gid 1000), not root.
 
+## Architecture
+
+amd64 only. `rtk`'s installer has no musl-compatible arm64 build (only a
+glibc `aarch64-unknown-linux-gnu` one, incompatible with this Alpine base),
+so building this image on an arm64 host installs a broken `rtk` binary.
+
 ## Versioning
 
 Published to `ghcr.io/kwitsch/base` on merge to `main`, tagged from

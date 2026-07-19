@@ -11,16 +11,19 @@ run() {
   docker run --rm "${IMAGE_TAG}" "$@"
 }
 
+fail() {
+  local name="$1" output="$2"
+  echo "FAILED: ${name}" >&2
+  echo "${output}" >&2
+  exit 1
+}
+
 check() {
   local name="$1"
   shift
   echo "==> Checking ${name}"
   local output
-  if ! output="$(run "$@" 2>&1)"; then
-    echo "FAILED: ${name}" >&2
-    echo "${output}" >&2
-    exit 1
-  fi
+  output="$(run "$@" 2>&1)" || fail "${name}" "${output}"
 }
 
 check "bash" bash --version
@@ -34,16 +37,10 @@ check "bun" bun --version
 
 echo "==> Checking node --version starts with v24."
 node_version="$(run node --version)"
-if [[ "${node_version}" != v24.* ]]; then
-  echo "FAILED: node --version expected v24.x, got ${node_version}" >&2
-  exit 1
-fi
+[[ "${node_version}" == v24.* ]] || fail "node --version (expected v24.x)" "${node_version}"
 
 echo "==> Checking non-root user"
 uid="$(run id -u)"
-if [[ "${uid}" == "0" ]]; then
-  echo "FAILED: container runs as root (uid 0)" >&2
-  exit 1
-fi
+[[ "${uid}" != "0" ]] || fail "non-root check" "container runs as root (uid 0)"
 
 echo "All checks passed."
