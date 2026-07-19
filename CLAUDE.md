@@ -25,3 +25,9 @@ An image whose `VERSION` file didn't change in a given merge is left untouched â
 ## Dependencies
 
 `.github/dependabot.yml` watches every `images/*` directory for base-image updates (`docker` ecosystem) and keeps the workflow's own actions up to date (`github-actions` ecosystem).
+
+## Language
+
+This repository's language is English throughout: code, comments, commit
+messages, documentation, and any Claude Code memory or rule files added
+under this repo.
