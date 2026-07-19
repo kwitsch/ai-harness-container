@@ -18,13 +18,25 @@ RUN --mount=type=cache,target=/var/cache/apk \
       npm \
       ripgrep
 
-RUN curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh -o /tmp/rtk-install.sh \
-    && RTK_INSTALL_DIR=/usr/local/bin sh /tmp/rtk-install.sh \
-    && rm /tmp/rtk-install.sh
+RUN for i in 1 2 3 4 5; do \
+      curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh -o /tmp/rtk-install.sh \
+        && RTK_INSTALL_DIR=/usr/local/bin sh /tmp/rtk-install.sh \
+        && break; \
+      echo "rtk install attempt $i failed, retrying..." >&2; \
+      sleep 3; \
+    done \
+    && rm -f /tmp/rtk-install.sh \
+    && test -x /usr/local/bin/rtk
 
-RUN curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh -o /tmp/cbm-install.sh \
-    && bash /tmp/cbm-install.sh --dir=/usr/local/bin --skip-config \
-    && rm /tmp/cbm-install.sh
+RUN for i in 1 2 3 4 5; do \
+      curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh -o /tmp/cbm-install.sh \
+        && bash /tmp/cbm-install.sh --dir=/usr/local/bin --skip-config \
+        && break; \
+      echo "codebase-memory-mcp install attempt $i failed, retrying..." >&2; \
+      sleep 3; \
+    done \
+    && rm -f /tmp/cbm-install.sh \
+    && test -x /usr/local/bin/codebase-memory-mcp
 
 COPY --from=bun /usr/local/bin/bun /usr/local/bin/bun
 
