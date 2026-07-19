@@ -18,11 +18,13 @@ RUN --mount=type=cache,target=/var/cache/apk \
       npm \
       ripgrep
 
-RUN curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh \
-      | RTK_INSTALL_DIR=/usr/local/bin sh
+RUN curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh -o /tmp/rtk-install.sh \
+    && RTK_INSTALL_DIR=/usr/local/bin sh /tmp/rtk-install.sh \
+    && rm /tmp/rtk-install.sh
 
-RUN curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh \
-      | bash -s -- --dir=/usr/local/bin --skip-config
+RUN curl -fsSL https://raw.githubusercontent.com/DeusData/codebase-memory-mcp/main/install.sh -o /tmp/cbm-install.sh \
+    && bash /tmp/cbm-install.sh --dir=/usr/local/bin --skip-config \
+    && rm /tmp/cbm-install.sh
 
 COPY --from=bun /usr/local/bin/bun /usr/local/bin/bun
 
