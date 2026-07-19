@@ -16,7 +16,7 @@ docker build -t ai-harness-base images/base
 | build-base | Alpine `build-base` package (gcc, make, musl-dev, etc. — Alpine's build-essentials equivalent) |
 | ripgrep (`rg`) | Alpine `ripgrep` package |
 | git | Alpine `git` package |
-| GitHub CLI (`gh`) | Alpine `github-cli` package |
+| GitHub CLI (`gh`) | latest release from [cli/cli](https://github.com/cli/cli) (static binary — Alpine's `github-cli` apk package lags upstream) |
 | Node.js 24 | Alpine `nodejs` / `npm` packages |
 | [bun](https://bun.com) | copied from the official `oven/bun:alpine` image |
 | [rtk](https://github.com/rtk-ai/rtk) | official install script |
